@@ -1,24 +1,30 @@
-using System.Collections;
-using UnityEngine;
+using System;
+using Newtonsoft.Json;
+using Zenject;
 
-public class DungeonFloor : MonoBehaviour
+[JsonObjectAttribute]
+public class DungeonFloor
 {
-    Team
-        playerTeam,
-        mobTeam;
+    [JsonPropertyAttribute] public uint floorNumber;
 
-    double
-        powerCapacity;
+    private DungeonFloorView view;
+    private Battle battle;
 
-    public float fillAmount => playerTeam.totalPower / (playerTeam.totalPower + mobTeam.totalPower);
 
-    private void Update()
+    public event Action<uint> onFloorNumberUp;
+
+    [Inject]
+    public DungeonFloor(DungeonFloorView view, Battle battle)
     {
+        this.view = view;
+        view.onFloorsSwitchAnimationEnd += UpFloorNumber;
 
     }
 
-    private void Battle()
+    public void UpFloorNumber()
     {
-
+        floorNumber++;
+        onFloorNumberUp?.Invoke(floorNumber);
     }
+
 }
