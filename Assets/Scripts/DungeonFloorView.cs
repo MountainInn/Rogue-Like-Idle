@@ -1,6 +1,7 @@
 using System;
 using UnityEngine;
 using Zenject;
+using TMPro;
 
 public class DungeonFloorView :MonoBehaviour
 {

@@ -1,14 +1,21 @@
 using System;
 using System.Collections.Generic;
+using UnityEngine;
+using Newtonsoft.Json;
 
-public class Hero : Unit
+[JsonObjectAttribute]
+public class Hero : MonoBehaviour
 {
-    Expiriense expiriense;
+    [JsonPropertyAttribute] public Expiriense expiriense {get; private set;}
+    [JsonPropertyAttribute] public Unit unit {get; private set;}
 
-    public Hero(Expiriense expiriense, Level level)
+    private Awake()
     {
-        this.expiriense = expiriense;
-        this.level = level;
+        Level level = new Level(1);
+        this.unit.level = level;
+        this.expiriense = new Expiriense(level, (level)=> level * 100);
     }
 
+
+    static public implicit operator Unit(Hero hero) => hero.unit;
 }

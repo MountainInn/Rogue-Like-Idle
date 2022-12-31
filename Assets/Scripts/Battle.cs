@@ -26,10 +26,15 @@ public class Battle : MonoBehaviour
     }
 
     [Inject]
-    public void Construct(Spawner spawner)
+    public void Construct(Spawner spawner, Hero hero, DungeonFloor dungeonFloor)
     {
         spawner.onMobsSpawned += PrepareNewMobs;
         spawner.onMobsSpawned += (_) => StartBattle();
+
+        onPlayerWon += ()=> hero.expiriense.Gain(dungeonFloor.floorNumber);
+
+        if (!playerTeam.units.Contains(hero))
+            playerTeam.units.Add(hero);
     }
 
     private void PrepareNewMobs(List<Unit> mobs)
@@ -72,13 +77,13 @@ public class Battle : MonoBehaviour
 
         if (progress == 1.0)
         {
-            onPlayerWon?.Invoke();
             StopBattle();
+            onPlayerWon?.Invoke();
         }
         else if (progress == 0.0)
         {
-            onPlayerLost?.Invoke();
             StopBattle();
+            onPlayerLost?.Invoke();
         }
     }
 

@@ -2,17 +2,14 @@ using System;
 using System.Collections.Generic;
 using MountainInn;
 using Newtonsoft.Json;
+using System.Linq;
 
 [JsonObjectAttribute]
 public partial class Unit
 {
     [JsonPropertyAttribute] public Level level;
     [JsonPropertyAttribute] public double power;
-
-    [JsonPropertyAttribute]
-    public double
-        baseDefense, baseDamage,
-        defense, damage;
+    [JsonPropertyAttribute] public Stat defense, attack;
 
     [JsonPropertyAttribute] public Team enemyTeam;
     [JsonPropertyAttribute] public Unit target;
@@ -55,7 +52,77 @@ public partial class Unit
     }
 
 
-    abstract public partial class Skill {}
+    abstract public partial class Skill
+    {
+    }
+
+    [JsonObjectAttribute]
+    public class Stat
+    {
+        private double Base;
+        private List<Ref<double>>
+            mults, superMults, tempMults;
+
+        public Ref<double> Result {get; private set;}
+
+        public Stat(double Base)
+        {
+            this.Base = Base;
+            this.Result = Base;
+        }
+
+        public void Mult(double mult)
+        {
+            mults.Add(mult);
+            Recalculate();
+        }
+
+        public void MultSuper(double mult)
+        {
+            superMults.Add(mult);
+            Recalculate();
+        }
+
+        public void MultTemp(double mult)
+        {
+            tempMults.Add(mult);
+            Recalculate();
+        }
+        public void ResetTempMults()
+        {
+            tempMults.Clear();
+            Recalculate();
+        }
+
+        private void Recalculate()
+        {
+            var Product =
+                mults
+                .Concat(superMults)
+                .Concat(tempMults)
+                .Aggregate((a , b)=> a*b);
+
+            Result = Base * Product;
+        }
+
+        static public implicit operator double(Stat stat) => stat.Result.Value;
+    }
 }
 
+public class Ref<T>
+    where T : unmanaged
+{
 
+    public T Value {get ; private set; }
+
+    public Ref(T value)
+    {
+        Value = value;
+    }
+
+    static public implicit operator T(Ref<T> reft) => reft.Value;
+    static public implicit operator Ref<T>(T t)
+    {
+        return new Ref<T>(t);
+    }
+}

@@ -123,7 +123,29 @@ public class StunBaton : Unit.Skill
 
     protected override void UseSkill()
     {
-        owner.target.damage -= owner.target.damage * skillPower;
-        owner.target.defense -= owner.target.defense * skillPower;
+        owner.acAttack -= owner.damage * skillPower;
+        owner.acDefense -= owner.damage * skillPower;
+    }
+}
+
+
+public class ChallengeSkill_Weakness : Unit.Skill
+{
+    private Ref<double> multiplier;
+
+    public ChallengeSkill_Weakness(int maxLevel) : base(maxLevel)
+    {
+    }
+
+    protected override void AdvanceSkill()
+    {
+        skillPower = 0.05 * level;
+        multiplier = skillPower;
+    }
+
+    protected override void UseSkill()
+    {
+        owner.defense.AddSuperMult(multiplier);
+        owner.attack.AddSuperMult(multiplier);
     }
 }

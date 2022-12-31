@@ -18,7 +18,11 @@ public class DungeonFloor
     {
         this.view = view;
         view.onFloorsSwitchAnimationEnd += UpFloorNumber;
+    }
 
+    private void Start()
+    {
+        onFloorNumberUp?.Invoke(floorNumber);
     }
 
     public void UpFloorNumber()
