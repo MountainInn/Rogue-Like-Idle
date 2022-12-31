@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using MountainInn;
 using Newtonsoft.Json;
-using System.Linq;
 
 [JsonObjectAttribute]
 public partial class Unit
@@ -49,62 +48,5 @@ public partial class Unit
             power = 0;
             onUnitDied?.Invoke(this);
         }
-    }
-
-
-    abstract public partial class Skill
-    {
-    }
-
-    [JsonObjectAttribute]
-    public class Stat
-    {
-        private double Base;
-        private List<Ref<double>>
-            mults, superMults, tempMults;
-
-        public Ref<double> Result {get; private set;}
-
-        public Stat(double Base)
-        {
-            this.Base = Base;
-            this.Result = Base;
-        }
-
-        public void Mult(double mult)
-        {
-            mults.Add(mult);
-            Recalculate();
-        }
-
-        public void MultSuper(double mult)
-        {
-            superMults.Add(mult);
-            Recalculate();
-        }
-
-        public void MultTemp(double mult)
-        {
-            tempMults.Add(mult);
-            Recalculate();
-        }
-        public void ResetTempMults()
-        {
-            tempMults.Clear();
-            Recalculate();
-        }
-
-        private void Recalculate()
-        {
-            var Product =
-                mults
-                .Concat(superMults)
-                .Concat(tempMults)
-                .Aggregate((a , b)=> a*b);
-
-            Result = Base * Product;
-        }
-
-        static public implicit operator double(Stat stat) => stat.Result.Value;
     }
 }
