@@ -33,7 +33,8 @@ public class Battle : MonoBehaviour
         spawner.onMobsSpawned += PrepareNewMobs;
         spawner.onMobsSpawned += (_) => StartBattle();
 
-        onPlayerWon += ()=> hero.expiriense.Gain(dungeonFloor.floorNumber);
+        onPlayerWon += () => hero.expiriense.Gain(dungeonFloor.floorNumber);
+
 
         playerTeam = new Team(hero.unit);
     }
