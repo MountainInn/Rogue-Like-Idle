@@ -15,7 +15,7 @@ public class Spawner
         dungeonFloor.onFloorNumberUp += SpawnNewMobs;
     }
 
-    private void SpawnNewMobs(uint floorNumber)
+    public void SpawnNewMobs(uint floorNumber)
     {
         List<Unit> mobs = new List<Unit>();
 
