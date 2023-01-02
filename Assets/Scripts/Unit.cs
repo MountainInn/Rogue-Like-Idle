@@ -13,7 +13,7 @@ public partial class Unit
     [JsonPropertyAttribute] public Team enemyTeam;
     [JsonPropertyAttribute] public Unit target;
 
-    [JsonPropertyAttribute] private List<Skill> activeSkills;
+    [JsonPropertyAttribute] protected List<Skill> activeSkills;
     public event Action<Unit> onUnitDied;
 
     public Unit(double baseDefense, double baseDamage, List<Skill> activeSkills = null)
