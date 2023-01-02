@@ -33,13 +33,12 @@ public class Battle : MonoBehaviour
 
         onPlayerWon += ()=> hero.expiriense.Gain(dungeonFloor.floorNumber);
 
-        if (!playerTeam.units.Contains(hero))
-            playerTeam.units.Add(hero);
+        playerTeam = new Team(hero.unit);
     }
 
     private void PrepareNewMobs(List<Unit> mobs)
     {
-        mobTeam.units = mobs;
+        mobTeam = new Team(mobs);
         PrepareBothTeamsForBattle();
     }
 
