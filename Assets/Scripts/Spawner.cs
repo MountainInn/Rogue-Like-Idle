@@ -9,10 +9,12 @@ public class Spawner
     public event Action<List<Unit>> onMobsSpawned;
 
     [Inject]
-    public void Construct(DungeonFloor dungeonFloor)
+    public void Construct(DungeonFloor dungeonFloor, Battle battle)
     {
         this.dungeonFloor = dungeonFloor;
         dungeonFloor.onFloorNumberUp += SpawnNewMobs;
+
+        battle.onReadyToStart += () => SpawnNewMobs(dungeonFloor.floorNumber);
     }
 
     public void SpawnNewMobs(uint floorNumber)

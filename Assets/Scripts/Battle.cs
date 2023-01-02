@@ -18,6 +18,8 @@ public class Battle : MonoBehaviour
     public event Action<double> onBattleProgressUpdated;
     public event Action onPlayerWon;
     public event Action onPlayerLost;
+    public event Action onReadyToStart;
+
 
     [OnDeserialized]
     internal void OnDeserializedMethod(StreamingContext context)
@@ -34,6 +36,11 @@ public class Battle : MonoBehaviour
         onPlayerWon += ()=> hero.expiriense.Gain(dungeonFloor.floorNumber);
 
         playerTeam = new Team(hero.unit);
+    }
+
+    private void Start()
+    {
+        onReadyToStart?.Invoke();
     }
 
     private void PrepareNewMobs(List<Unit> mobs)
