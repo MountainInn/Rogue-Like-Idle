@@ -29,7 +29,7 @@ public partial class Unit
 
     public void Attack(float delta)
     {
-        target.power -= damage * delta;
+        target.power -= attack * delta;
     }
     public void Defend(float delta)
     {
