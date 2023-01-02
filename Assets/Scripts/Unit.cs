@@ -38,7 +38,10 @@ public partial class Unit
 
     public void SelectTarget()
     {
-        target = enemyTeam.units.GetRandom();
+        if (enemyTeam.units.Count >= 1)
+            target = enemyTeam.units[0];
+        else
+            target = null;
     }
 
     public void CheckYourCondition()
