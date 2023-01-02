@@ -19,7 +19,7 @@ public class Spawner
     {
         List<Unit> mobs = new List<Unit>();
 
-        mobs.Add(new Unit( baseDefense: 100,  baseDamage:100));
+        mobs.Add(new Unit(5, 5, null));
 
         onMobsSpawned?.Invoke(mobs);
     }

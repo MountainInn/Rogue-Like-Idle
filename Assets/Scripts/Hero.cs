@@ -16,6 +16,7 @@ public class Hero : MonoBehaviour
         this.expiriense = new Expiriense(level, (level)=> level * 100);
     }
 
+        this.unit = new Unit(10, 10, null);
 
     static public implicit operator Unit(Hero hero) => hero.unit;
 }

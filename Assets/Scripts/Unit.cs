@@ -16,11 +16,15 @@ public partial class Unit
     [JsonPropertyAttribute] protected List<Skill> activeSkills;
     public event Action<Unit> onUnitDied;
 
-    public Unit(double baseDefense, double baseDamage, List<Skill> activeSkills = null)
+    public Unit()
     {
-        this.baseDefense = baseDefense;
-        this.baseDamage = baseDamage;
-        this.activeSkills = activeSkills;
+        activeSkills = new List<Skill>();
+    }
+    public Unit(double baseDefense, double baseAttack, List<Skill> activeSkills = null)
+    {
+        this.activeSkills = activeSkills ?? new List<Skill>();
+        this.defense = new Stat(baseDefense);
+        this.attack = new Stat(baseAttack);
     }
 
     public void Attack(float delta)
