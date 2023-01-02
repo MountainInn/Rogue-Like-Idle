@@ -1,6 +1,8 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+
 
 public class CharacterClass
 {
@@ -9,15 +11,15 @@ public class CharacterClass
     public CharacterClass()
     {
 
-        TalentTree talentTree = new TalentTree()
-        {
-            new SimpleStrike(50),
-            ( new Healing(50), typeof(SimpleStrike), 20 ),
-        };
+        // TalentTree talentTree = new TalentTree()
+        // {
+        //     new SimpleStrike(50),
+        //     ( new Healing(50), typeof(SimpleStrike), 20 ),
+        // };
     }
 }
 
-public class TalentTree
+public class TalentTree : IEnumerable
 {
     List<Unit.Skill> skills;
     public event Action<Unit.Skill> onTalentUnlocked;
@@ -25,6 +27,11 @@ public class TalentTree
     public TalentTree()
     {
        
+    }
+
+    public IEnumerator GetEnumerator()
+    {
+        return skills.GetEnumerator();
     }
 
     public void Add(Unit.Skill rootSkill)
