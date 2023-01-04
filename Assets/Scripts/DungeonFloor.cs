@@ -18,11 +18,8 @@ public class DungeonFloor
     {
         this.view = view;
         view.onFloorsSwitchAnimationHalf += UpFloorNumber;
-    }
 
-    private void Start()
-    {
-        onFloorNumberUp?.Invoke(floorNumber);
+        floorNumber = 1;
     }
 
     public void UpFloorNumber()
