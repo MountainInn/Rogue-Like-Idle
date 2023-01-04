@@ -20,6 +20,6 @@ public class FloorNumberView : MonoBehaviour
     }
     private void DisplayFloorNumber(uint number)
     {
-        floorNumberText.text = $"Floor {number}".PadRight(10);
+        floorNumberText.text = number.ToString();
     }
 }
