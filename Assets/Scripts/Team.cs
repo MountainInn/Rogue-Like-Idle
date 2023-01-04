@@ -14,11 +14,19 @@ public class Team : IEnumerable<Unit>
 
     public Team(List<Unit> units)
     {
-        this.units = units;
+        this.units = new List<Unit>();
+        foreach (var item in units)
+        {
+            Add(item);
+        }
     }
     public Team(params Unit[] units)
     {
-        this.units = units.ToList();
+        this.units = new List<Unit>();
+        foreach (var item in units)
+        {
+            Add(item);
+        }
     }
 
     public void PrepareForBattle(Team enemyTeam)
@@ -44,7 +52,11 @@ public class Team : IEnumerable<Unit>
 
     public void Set(List<Unit> units)
     {
-        this.units = units;
+        this.units = new List<Unit>();
+        foreach (var item in units)
+        {
+            Add(item);
+        }
     }
 
     public void Add(Unit unit)
