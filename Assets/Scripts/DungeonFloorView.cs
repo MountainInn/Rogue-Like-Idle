@@ -8,7 +8,6 @@ public class DungeonFloorView :MonoBehaviour
     [SerializeField]
     MeshRenderer
         currentFloor,
-        nextFloor,
         gradient;
 
     private Animator animator;
