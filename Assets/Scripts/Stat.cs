@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using Newtonsoft.Json;
 using System.Linq;
+using System;
 
 public partial class Unit
 {
@@ -12,6 +13,8 @@ public partial class Unit
             mults, superMults, tempMults;
 
         public Ref<double> Result {get; private set;}
+
+        public event Action<double> onResultChanged;
 
         public Stat(double Base)
         {
@@ -51,6 +54,8 @@ public partial class Unit
                 .Aggregate((a , b)=> a*b);
 
             Result = Base * Product;
+
+            onResultChanged?.Invoke(Result);
         }
 
         static public implicit operator double(Stat stat) => stat.Result.Value;
