@@ -6,6 +6,7 @@ using Newtonsoft.Json;
 [JsonObjectAttribute]
 public partial class Unit
 {
+    [JsonPropertyAttribute] public string name;
     [JsonPropertyAttribute] public Level level;
     [JsonPropertyAttribute] public double power
     {
