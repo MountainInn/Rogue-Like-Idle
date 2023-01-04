@@ -25,5 +25,9 @@ public class BattleInstaller : MonoInstaller
             .Bind<Spawner>()
             .FromNew()
             .AsSingle();
+        Container
+            .Bind<MobView>()
+            .FromResource("MobView")
+            .AsSingle();
     }
 }
