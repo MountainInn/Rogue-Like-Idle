@@ -55,6 +55,11 @@ public partial class Unit
         activeSkills.ForEach(skill => skill.Tick(delta));
     }
 
+    public void PrepareToFight()
+    {
+        power = defense + attack;
+    }
+
     public void SelectTarget()
     {
         if (enemyTeam.units.Count >= 1)
