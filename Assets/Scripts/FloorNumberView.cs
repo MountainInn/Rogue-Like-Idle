@@ -4,7 +4,8 @@ using TMPro;
 
 public class FloorNumberView : MonoBehaviour
 {
-    [SerializeField] TextMeshProUGUI floorNumberText;
+    [SerializeField] TextMeshPro floorNumberText;
+
     private DungeonFloor dungeonFloor;
 
     [Inject]
