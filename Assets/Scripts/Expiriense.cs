@@ -6,7 +6,8 @@ public class Expiriense
     public event Action onMaxReached;
 
     Level level;
-    double Value, Max;
+    public double Value {get; private set;}
+    public double Max {get; private set;}
     Func<Level, double> maxExpirienseFunc;
 
     public Expiriense(Level level, Func<Level, double> maxExpirienseFunc)
