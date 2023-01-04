@@ -9,18 +9,18 @@ public class Hero : MonoBehaviour
 {
     [JsonPropertyAttribute] public Expiriense expiriense {get; private set;}
     [JsonPropertyAttribute] public Unit unit {get; private set;}
+    [JsonPropertyAttribute] public Level level {get; private set;}
 
     public event Action<Hero> onHeroInitialized;
 
     [Inject]
     private void Awake()
     {
-        Level level = new Level(1);
-
+        this.level = new Level(1);
         this.expiriense = new Expiriense(level, (level)=> level * 100);
-
         this.unit = new Unit(10, 10, null);
         this.unit.level = level;
+
         onHeroInitialized?.Invoke(this);
     }
 
