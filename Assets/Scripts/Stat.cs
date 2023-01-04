@@ -20,6 +20,10 @@ public partial class Unit
         {
             this.Base = Base;
             this.Result = Base;
+
+            mults = new List<Ref<double>>();
+            superMults = new List<Ref<double>>();
+            tempMults = new List<Ref<double>>();
         }
 
         public void Mult(double mult)
