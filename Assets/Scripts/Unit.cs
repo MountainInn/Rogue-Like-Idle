@@ -17,6 +17,7 @@ public partial class Unit
         }
     }
 
+    public bool isAlive {get; private set;}
     private double _power;
     [JsonPropertyAttribute] public Stat defense, attack;
 
@@ -30,12 +31,14 @@ public partial class Unit
     public Unit()
     {
         activeSkills = new List<Skill>();
+        this.isAlive = true;
     }
     public Unit(double baseDefense, double baseAttack, List<Skill> activeSkills = null)
     {
         this.activeSkills = activeSkills ?? new List<Skill>();
         this.defense = new Stat(baseDefense);
         this.attack = new Stat(baseAttack);
+        this.isAlive = true;
     }
 
     public void Attack(float delta)
@@ -64,6 +67,7 @@ public partial class Unit
         if (power <= 0)
         {
             power = 0;
+            isAlive = false;
             onUnitDied?.Invoke(this);
         }
     }
