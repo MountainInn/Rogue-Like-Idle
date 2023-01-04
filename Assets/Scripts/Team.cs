@@ -31,23 +31,26 @@ public class Team : IEnumerable<Unit>
 
     public void PrepareForBattle(Team enemyTeam)
     {
-        units.ForEach(unit =>
+        foreach ( var unit in units )
         {
             unit.enemyTeam = enemyTeam;
 
             unit.SelectTarget();
-        });
+            unit.PrepareToFight();
+        }
     }
 
     public void SimulateUnits(float delta)
     {
-        units.ForEach(unit =>
+        foreach (var unit in units)
         {
+            if (!unit.isAlive) continue;
+
             unit.Attack(delta);
             unit.Defend(delta);
             unit.UseSkills(delta);
             unit.CheckYourCondition();
-        });
+        };
     }
 
     public void Set(List<Unit> units)
