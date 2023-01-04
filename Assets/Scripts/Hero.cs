@@ -10,6 +10,8 @@ public class Hero : MonoBehaviour
     [JsonPropertyAttribute] public Expiriense expiriense {get; private set;}
     [JsonPropertyAttribute] public Unit unit {get; private set;}
 
+    public event Action<Hero> onHeroInitialized;
+
     [Inject]
     private void Awake()
     {
@@ -19,6 +21,7 @@ public class Hero : MonoBehaviour
 
         this.unit = new Unit(10, 10, null);
         this.unit.level = level;
+        onHeroInitialized?.Invoke(this);
     }
 
     static public implicit operator Unit(Hero hero) => hero.unit;
