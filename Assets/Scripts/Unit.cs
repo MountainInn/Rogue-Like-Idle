@@ -41,6 +41,10 @@ public partial class Unit
         this.attack = new Stat(baseAttack);
         this.isAlive = true;
     }
+    public Unit(string name, double baseAttack, double baseDefense, List<Skill> activeSkills = null) : this(baseDefense, baseAttack, activeSkills)
+    {
+        this.name = name;
+    }
 
     public void Attack(float delta)
     {
