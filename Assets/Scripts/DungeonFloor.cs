@@ -17,7 +17,7 @@ public class DungeonFloor
     public DungeonFloor(DungeonFloorView view, Battle battle)
     {
         this.view = view;
-        view.onFloorsSwitchAnimationEnd += UpFloorNumber;
+        view.onFloorsSwitchAnimationHalf += UpFloorNumber;
     }
 
     private void Start()

@@ -14,6 +14,7 @@ public class DungeonFloorView :MonoBehaviour
     private Animator animator;
     private int switchFloorsTrigger;
 
+    public event Action onFloorsSwitchAnimationHalf;
     public event Action onFloorsSwitchAnimationEnd;
 
     [Inject]
@@ -31,6 +32,11 @@ public class DungeonFloorView :MonoBehaviour
     public void SwitchFloors()
     {
         animator.SetTrigger(switchFloorsTrigger);
+    }
+
+    private void OnFloorsSwitchedHalf()
+    {
+        onFloorsSwitchAnimationHalf?.Invoke();
     }
 
     private void OnFloorsSwitched()
