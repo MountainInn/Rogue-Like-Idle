@@ -7,7 +7,17 @@ using Newtonsoft.Json;
 public partial class Unit
 {
     [JsonPropertyAttribute] public Level level;
-    [JsonPropertyAttribute] public double power;
+    [JsonPropertyAttribute] public double power
+    {
+        get => _power;
+        set
+        {
+            _power = value;
+            onPowerChanged?.Invoke(_power);
+        }
+    }
+
+    private double _power;
     [JsonPropertyAttribute] public Stat defense, attack;
 
     [JsonPropertyAttribute] public Team enemyTeam;
@@ -15,6 +25,7 @@ public partial class Unit
 
     [JsonPropertyAttribute] protected List<Skill> activeSkills;
     public event Action<Unit> onUnitDied;
+    public event Action<double> onPowerChanged;
 
     public Unit()
     {
