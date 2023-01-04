@@ -7,6 +7,7 @@ public class Spawner
     private DungeonFloor dungeonFloor;
 
     public event Action<List<Unit>> onMobsSpawned;
+    public event Action<Unit> onOneNewMobSpawned;
 
     [Inject]
     public void Construct(DungeonFloor dungeonFloor, Battle battle)
@@ -21,8 +22,17 @@ public class Spawner
     {
         List<Unit> mobs = new List<Unit>();
 
-        mobs.Add(new Unit(5, 5, null));
+        mobs.Add(SpawnMob(floorNumber));
 
         onMobsSpawned?.Invoke(mobs);
+    }
+
+    public Unit SpawnMob(uint floorNumber)
+    {
+        Unit mob = new Unit(5,5,null);
+
+        onOneNewMobSpawned?.Invoke(mob);
+
+        return mob;
     }
 }
