@@ -21,6 +21,7 @@ public class Battle : MonoBehaviour
     public event Action onPlayerLost;
     public event Action onReadyToStart;
 
+    private Hero hero;
 
     [OnDeserialized]
     internal void OnDeserializedMethod(StreamingContext context)
@@ -29,17 +30,18 @@ public class Battle : MonoBehaviour
     }
 
     [Inject]
-    public void Construct(Spawner spawner, Hero hero, DungeonFloor dungeonFloor)
+    public void Construct(Spawner spawner, Hero hero, DungeonFloor dungeonFloor, DungeonFloorView dungeonFloorView)
     {
         spawner.onMobsSpawned += InitMobTeam;
         spawner.onMobsSpawned += (_) => InitHeroTeam();
         spawner.onMobsSpawned += (_) => PrepareBothTeamsForBattle();
         spawner.onMobsSpawned += (_) => StartBattle();
 
+        dungeonFloorView.onFloorsSwitchAnimationEnd += onReadyToStart;
+
         onPlayerWon += () => hero.expiriense.Gain(dungeonFloor.floorNumber);
 
-
-        playerTeam = new Team(hero.unit);
+        this.hero = hero;
     }
 
     private void Start()
