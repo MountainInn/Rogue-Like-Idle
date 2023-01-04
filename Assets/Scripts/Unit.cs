@@ -34,7 +34,7 @@ public partial class Unit
         activeSkills = new List<Skill>();
         this.isAlive = true;
     }
-    public Unit(double baseDefense, double baseAttack, List<Skill> activeSkills = null)
+    public Unit(double baseAttack,double baseDefense,  List<Skill> activeSkills = null)
     {
         this.activeSkills = activeSkills ?? new List<Skill>();
         this.defense = new Stat(baseDefense);
