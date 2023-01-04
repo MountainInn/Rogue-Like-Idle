@@ -15,6 +15,7 @@ public class Battle : MonoBehaviour
 
     private bool isBattleOngoing;
 
+    public event Action<Team> onMobTeamInitialized;
     public event Action<double> onBattleProgressUpdated;
     public event Action onPlayerWon;
     public event Action onPlayerLost;
@@ -30,7 +31,9 @@ public class Battle : MonoBehaviour
     [Inject]
     public void Construct(Spawner spawner, Hero hero, DungeonFloor dungeonFloor)
     {
-        spawner.onMobsSpawned += PrepareNewMobs;
+        spawner.onMobsSpawned += InitMobTeam;
+        spawner.onMobsSpawned += (_) => InitHeroTeam();
+        spawner.onMobsSpawned += (_) => PrepareBothTeamsForBattle();
         spawner.onMobsSpawned += (_) => StartBattle();
 
         onPlayerWon += () => hero.expiriense.Gain(dungeonFloor.floorNumber);
@@ -44,10 +47,14 @@ public class Battle : MonoBehaviour
         onReadyToStart?.Invoke();
     }
 
-    private void PrepareNewMobs(List<Unit> mobs)
+    private void InitMobTeam(List<Unit> mobs)
     {
         mobTeam = new Team(mobs);
-        PrepareBothTeamsForBattle();
+        onMobTeamInitialized?.Invoke(mobTeam);
+    }
+    private void InitHeroTeam()
+    {
+        playerTeam = new Team(hero.unit);
     }
 
     private void Update()
