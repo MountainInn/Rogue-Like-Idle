@@ -13,7 +13,6 @@ public class Spawner
     public void Construct(DungeonFloor dungeonFloor, Battle battle)
     {
         this.dungeonFloor = dungeonFloor;
-        dungeonFloor.onFloorNumberUp += SpawnNewMobs;
 
         battle.onReadyToStart += () => SpawnNewMobs(dungeonFloor.floorNumber);
     }
