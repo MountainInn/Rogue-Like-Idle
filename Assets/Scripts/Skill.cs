@@ -7,28 +7,30 @@ public partial class Unit
     abstract public partial class Skill
     {
         [JsonPropertyAttribute] protected Unit owner;
+        [JsonPropertyAttribute] protected Unit target => owner.target;
 
         [JsonPropertyAttribute] protected float cooldown, t;
-        [JsonPropertyAttribute] protected int level, maxLevel;
         [JsonPropertyAttribute] protected double skillPower;
 
         public event Action<float> onSkillTick;
         public event Action<int> onLevelUp;
+        public event Action onUseSkill;
 
+        public Skill(){}
         public Skill(int maxLevel) : this(null, maxLevel) {}
 
         public Skill(Unit owner, int maxLevel)
         {
             this.owner = owner;
-            this.level = 1;
-            this.maxLevel = maxLevel;
 
             this.cooldown = float.NaN;
-            AdvanceSkill();
         }
 
         public void Tick(float delta)
         {
+            if (cooldown == float.NaN)
+                return;
+           
             t += delta;
             onSkillTick?.Invoke(t);
 
@@ -39,75 +41,57 @@ public partial class Unit
             UseSkill();
         }
 
-        public void Levelup()
+        abstract public void AdvanceSkill(int level);
+
+        protected void UseSkill()
         {
-            level++;
-            AdvanceSkill();
-            onLevelUp?.Invoke(level);
+            ConcreteUseSkill();
+           
+            onUseSkill?.Invoke();
         }
-
-        abstract protected void AdvanceSkill();
-
-        abstract protected void UseSkill();
+        abstract protected void ConcreteUseSkill();
     }
 
     public class SimpleStrike : Unit.Skill
     {
-        public SimpleStrike(int maxLevel) : base(maxLevel)
+        public new Stat skillPower {get; protected set;}
+        Ref<int> levelMult;
+
+        public SimpleStrike()
         {
+            skillPower = new Stat(.2);
+            skillPower.Mult(levelMult);
+        }
+        public SimpleStrike(int maxLevel) : base(maxLevel) {}
+
+        public override void AdvanceSkill(int level)
+        {
+            levelMult = level;
+            cooldown = MathF.Max(3,  6 - level * .5f);
         }
 
-        protected override void AdvanceSkill()
+        protected override void ConcreteUseSkill()
         {
-            skillPower = level * 0.1f;
-            cooldown = MathF.Max(3,  6 - level);
-        }
-
-        protected override void UseSkill()
-        {
-            // owner.attack += owner.baseDamage * skillPower;
-        }
-    }
-
-    public class ImprovedSimpleStrike : Unit.Skill
-    {
-        Unit.Skill previousVersion;
-
-        public ImprovedSimpleStrike(int maxLevel) : base(maxLevel)
-        {
-        }
-
-        protected override void AdvanceSkill()
-        {
-            skillPower = level * 0.1f;
-
-            var simpleStrike = owner.activeSkills.Find(skill => skill is SimpleStrike);
-            // simpleStrike.skillPower = simpleStrike.skillPower + skillPower;
-        }
-
-        protected override void UseSkill()
-        {
+            owner.power += owner.attack.Base * skillPower;
         }
     }
+
 
     public class Healing : Unit.Skill
     {
-        private Ref<double> mult;
+        public Healing() {}
 
-        public Healing(int maxLevel) : base(maxLevel)
-        {
-            // owner.defense.
-        }
+        public Healing(int maxLevel) : base(maxLevel) {}
 
-        protected override void AdvanceSkill()
+        public override void AdvanceSkill(int level)
         {
-            mult = skillPower = level * 10;
+            skillPower = level * 10;
             cooldown = MathF.Max(4, 10 - level);
         }
 
-        protected override void UseSkill()
+        protected override void ConcreteUseSkill()
         {
-            // owner.defense += owner.baseDefense * skillPower;
+            owner.power += owner.defense.Base * skillPower;
         }
     }
 
@@ -117,37 +101,16 @@ public partial class Unit
         {
         }
 
-        protected override void AdvanceSkill()
+        public override void AdvanceSkill(int level)
         {
             skillPower = level * 0.05f;
             cooldown = MathF.Max(8, 15 - level);
         }
 
-        protected override void UseSkill()
+        protected override void ConcreteUseSkill()
         {
-            // owner.target.defense
-        }
-    }
-
-
-    public class ChallengeSkill_Weakness : Unit.Skill
-    {
-        private Ref<double> multiplier;
-
-        public ChallengeSkill_Weakness(int maxLevel) : base(maxLevel)
-        {
-        }
-
-        protected override void AdvanceSkill()
-        {
-            skillPower = 0.05 * level;
-            multiplier = skillPower;
-        }
-
-        protected override void UseSkill()
-        {
-            owner.defense.MultSuper(multiplier);
-            owner.attack.MultSuper(multiplier);
+            target.defense.AddTemp(owner.attack.Base * skillPower);
+            target.attack.AddTemp(owner.attack.Base * skillPower);
         }
     }
 
