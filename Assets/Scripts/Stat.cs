@@ -12,6 +12,7 @@ public partial class Unit
         private List<Ref<double>>
             mults, superMults, tempMults;
 
+        public Ref<double> tempAdditions;
         public Ref<double> Result {get; private set;}
 
         public event Action<double> onResultChanged;
@@ -43,9 +44,14 @@ public partial class Unit
             tempMults.Add(mult);
             Recalculate();
         }
-        public void ResetTempMults()
+        public void AddTemp(double add)
+        {
+            tempAdditions += add;
+        }
+        public void ResetTempMultsAndAdditions()
         {
             tempMults.Clear();
+            tempAdditions = 0;
             Recalculate();
         }
 
@@ -57,7 +63,7 @@ public partial class Unit
                 .Concat(tempMults)
                 .Aggregate((a , b)=> a*b);
 
-            Result = Base * Product;
+            Result = Base * Product + tempAdditions;
 
             onResultChanged?.Invoke(Result);
         }
