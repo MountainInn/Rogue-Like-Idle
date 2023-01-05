@@ -8,7 +8,7 @@ public partial class Unit
     [JsonObjectAttribute]
     public class Stat
     {
-        private double Base;
+        public double Base {get; private set;}
         private List<Ref<double>>
             mults, superMults, tempMults;
 
