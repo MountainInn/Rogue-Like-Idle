@@ -62,6 +62,10 @@ public partial class Unit
             onResultChanged?.Invoke(Result);
         }
 
+        public bool Contains(Ref<double> mult)
+        {
+            return mults.Contains(mult) || superMults.Contains(mult) || tempMults.Contains(mult);
+        }
         static public implicit operator double(Stat stat) => stat.Result.Value;
     }
 }
