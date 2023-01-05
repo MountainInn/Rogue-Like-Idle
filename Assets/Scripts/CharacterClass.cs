@@ -9,11 +9,6 @@ public class CharacterClass
     public CharacterClass()
     {
 
-        // TalentTree talentTree = new TalentTree()
-        // {
-        //     new SimpleStrike(50),
-        //     ( new Healing(50), typeof(SimpleStrike), 20 ),
-        // };
     }
 }
 
