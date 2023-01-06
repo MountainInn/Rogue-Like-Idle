@@ -91,7 +91,22 @@ public partial class Unit
         }
     }
 
-    public class ImprovedSimpleStrike : Unit.Talent
+    public class SimpleStrikeTalent : Unit.Talent
+    {
+        TalentActiveSkill activeSkill;
+
+        public SimpleStrikeTalent(uint gateLevel) : base("Simple Strike", gateLevel)
+        {
+            activeSkill = new TalentActiveSkill(owner, new Unit.SimpleStrike());
+        }
+
+        protected override void ConcreteLevelUp()
+        {
+            activeSkill.AdvanceSkill(level);
+        }
+    }
+
+    public class ImprovedSimpleStrikeTalent : Unit.Talent
     {
         Ref<double> mult;
 
