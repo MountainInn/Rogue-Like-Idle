@@ -12,7 +12,7 @@ public partial class Unit
         public Level level {get; protected set;}
         public uint gateLevel;
 
-        TalentPoints talentPoints;
+        private TalentPoints talentPoints;
 
         [Inject]
         public void InjectTalentPoints(TalentPoints talentPoints)
