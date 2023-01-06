@@ -28,9 +28,6 @@ public partial class Unit
 
         public void Tick(float delta)
         {
-            if (cooldown == float.NaN)
-                return;
-           
             t += delta;
             onSkillTick?.Invoke(t);
 
