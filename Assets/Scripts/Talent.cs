@@ -7,12 +7,10 @@ public partial class Unit
     [System.Serializable]
     abstract public class Talent
     {
-        [SerializeField] public Talent ancestor;
-        [SerializeField] public uint ancestorLevelRequirement;
-
         public string name {get; protected set;}
         protected Unit owner;
         public Level level {get; protected set;}
+        public uint gateLevel;
 
         TalentPoints talentPoints;
 
@@ -22,23 +20,15 @@ public partial class Unit
             this.talentPoints = talentPoints;
         }
 
-        public Talent()
+        protected Talent(uint gateLevel)
         {
+            this.gateLevel = gateLevel;
         }
-
-        public Talent(string name)
+        protected Talent(string name, uint gateLevel)
         {
             this.name = name;
             this.level = new Level(0);
-        }
-
-        public Talent SetAncestor(
-            Unit.Talent ancestor,
-            uint ancestorLevelRequirement)
-        {
-            this.ancestor = ancestor;
-            this.ancestorLevelRequirement = ancestorLevelRequirement;
-            return this;
+            this.gateLevel = gateLevel;
         }
 
         public void LevelUp()
@@ -104,7 +94,7 @@ public partial class Unit
     {
         Ref<double> mult;
 
-        public ImprovedSimpleStrike()
+        public ImprovedSimpleStrikeTalent(uint gateLevel) : base("Improved Simple Strike", gateLevel)
         {
             Unit.SimpleStrike simpleStrike = (Unit.SimpleStrike) owner.activeSkills.Find(skill => skill is SimpleStrike);
 
@@ -122,7 +112,8 @@ public partial class Unit
     public class HealingTalent : Unit.Talent
     {
         TalentActiveSkill talentActiveSkill;
-        public HealingTalent() : base("Healing")
+
+        public HealingTalent(uint gateLevel) : base("Healing", gateLevel)
         {
             talentActiveSkill = new TalentActiveSkill(owner, new Unit.Healing());
         }
@@ -137,7 +128,7 @@ public partial class Unit
     {
         TalentMultiplier attackMult, defenseMult;
 
-        public ChallengeTalent_Weakness() : base("Challenge: Weakness")
+        public ChallengeTalent_Weakness(uint gateLevel) : base("Challenge: Weakness", gateLevel)
         {
             attackMult = new TalentMultiplier(owner, owner.attack, (level) => level * 0.1);
             defenseMult = new TalentMultiplier(owner, owner.defense, (level) => level * 0.1);
