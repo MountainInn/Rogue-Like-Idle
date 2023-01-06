@@ -29,5 +29,9 @@ public class BattleInstaller : MonoInstaller
             .Bind<MobView>()
             .FromResource("MobView")
             .AsSingle();
+        Container
+            .Bind<TalentView>()
+            .FromResource("TalentView")
+            .AsSingle();
     }
 }
