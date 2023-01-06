@@ -55,13 +55,13 @@ public partial class Unit
             {
                 this.owner = owner;
                 this.skill = skill;
-
-                if (!owner.activeSkills.Contains(skill))
-                    owner.activeSkills.Add(skill);
             }
 
             public void AdvanceSkill(int level)
             {
+                if (!owner.activeSkills.Contains(skill))
+                    owner.activeSkills.Add(skill);
+
                 skill.AdvanceSkill(level);
             }
         }
