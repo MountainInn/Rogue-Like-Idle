@@ -12,16 +12,16 @@ public class Spawner
     private MobDataBase mobDataBase;
 
     [Inject]
-    public void Construct(DungeonFloor dungeonFloor, Battle battle)
+    public void Construct(DungeonFloor dungeonFloor,DungeonFloorView dungeonFloorView, Battle battle)
     {
+        this.dungeonFloor = dungeonFloor;
+
         mobDataBase = new MobDataBase();
         mobDataBase.UpdateMainPool(dungeonFloor.floorNumber);
 
-        this.dungeonFloor = dungeonFloor;
-
-        battle.onReadyToStart += () => SpawnNewMobs(dungeonFloor.floorNumber);
-
         dungeonFloor.onFloorNumberUp += mobDataBase.UpdateMainPool;
+
+        dungeonFloorView.onFloorsSwitchAnimationEnd += () => SpawnNewMobs(dungeonFloor.floorNumber);
     }
 
     public void SpawnNewMobs(uint floorNumber)

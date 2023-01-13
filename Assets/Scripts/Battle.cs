@@ -8,20 +8,18 @@ using System.Collections.Generic;
 [JsonObjectAttribute]
 public class Battle : MonoBehaviour
 {
-    [JsonPropertyAttribute] private Team playerTeam, mobTeam;
-
     [JsonPropertyAttribute] private double totalPower;
     [JsonPropertyAttribute] private float progress;
 
     private bool isBattleOngoing;
 
-    public event Action<Team> onMobTeamInitialized;
     public event Action<double> onBattleProgressUpdated;
     public event Action onPlayerWon;
     public event Action onPlayerLost;
     public event Action onReadyToStart;
 
     private Hero hero;
+    private Team mobTeam, heroTeam;
 
     [OnDeserialized]
     internal void OnDeserializedMethod(StreamingContext context)
@@ -30,34 +28,26 @@ public class Battle : MonoBehaviour
     }
 
     [Inject]
-    public void Construct(Spawner spawner, Hero hero, DungeonFloor dungeonFloor, DungeonFloorView dungeonFloorView)
+    public void Construct(Hero hero, TeamCreator teamCreator, DungeonFloor dungeonFloor)
     {
-        spawner.onMobsSpawned += InitMobTeam;
-        spawner.onMobsSpawned += (_) => InitHeroTeam();
-        spawner.onMobsSpawned += (_) => PrepareBothTeamsForBattle();
-        spawner.onMobsSpawned += (_) => StartBattle();
 
-        dungeonFloorView.onFloorsSwitchAnimationEnd += onReadyToStart;
+        teamCreator.onMobTeamCreated += CacheMobTeam;
+        teamCreator.onHeroTeamCreated += CacheHeroTeam;
+        teamCreator.onTeamsReady += StartBattle;
 
         onPlayerWon += () => hero.expiriense.Gain(dungeonFloor.floorNumber);
 
         this.hero = hero;
     }
 
+    public void CacheHeroTeam(Team heroTeam) => this.heroTeam = heroTeam;
+    public void CacheMobTeam(Team mobTeam) => this.mobTeam = mobTeam;
+
     private void Start()
     {
         onReadyToStart?.Invoke();
     }
 
-    private void InitMobTeam(List<Unit> mobs)
-    {
-        mobTeam = new Team(mobs);
-        onMobTeamInitialized?.Invoke(mobTeam);
-    }
-    private void InitHeroTeam()
-    {
-        playerTeam = new Team(hero.unit);
-    }
 
     private void Update()
     {
