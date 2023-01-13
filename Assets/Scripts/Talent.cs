@@ -94,11 +94,15 @@ public partial class Unit
         }
     }
 
-    public class SimpleStrikeTalent : Unit.Talent
+    public class SimpleStrikeTalent : Unit.Talent, IInitializable
     {
         TalentActiveSkill activeSkill;
 
         public SimpleStrikeTalent(uint gateLevel) : base("Simple Strike", gateLevel)
+        {
+        }
+
+        public void Initialize()
         {
             activeSkill = new TalentActiveSkill(owner, new Unit.SimpleStrike());
         }
