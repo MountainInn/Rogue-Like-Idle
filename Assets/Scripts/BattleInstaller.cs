@@ -38,6 +38,11 @@ public class BattleInstaller : MonoInstaller
             .Bind<TalentView>()
             .FromResource("TalentView")
             .AsSingle();
+
+        Container
+            .BindInterfacesAndSelfTo<Unit.ChallengeTalent_Weakness>()
+            .AsSingle()
+            .Lazy();
     }
 
     private Unit CreateHeroUnit()
