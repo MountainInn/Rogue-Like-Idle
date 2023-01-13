@@ -69,15 +69,12 @@ public partial class Unit
 
     public class TalentMultiplier : IInitializable
     {
-        public Unit owner {get; protected set;}
-
         public Ref<double> mult {get; protected set;}
         private Func<int, double> multFunc;
         private Stat stat;
 
-        public TalentMultiplier(Unit owner, Stat stat , Func<int , double> multFunc)
+        public TalentMultiplier(Stat stat, Func<int, double> multFunc)
         {
-            this.owner = owner;
             this.stat = stat;
             this.multFunc = multFunc;
         }
