@@ -79,6 +79,7 @@ public partial class Unit
         {
             this.stat = stat;
             this.multFunc = multFunc;
+            this.mult = 1;
         }
 
         public void UpdateMultiplier(int level)
