@@ -15,10 +15,11 @@ public partial class Unit
         private TalentPoints talentPoints;
 
         [Inject]
-        public void Construct(TalentPoints talentPoints, Hero hero)
+        public void Construct(// TalentPoints talentPoints,
+            Hero hero)
         {
-            this.talentPoints = talentPoints;
-            this.owner = hero;
+            // this.talentPoints = talentPoints;
+            hero.onHeroInitialized += (hero)=> this.owner = hero;
         }
 
         protected Talent(uint gateLevel)
