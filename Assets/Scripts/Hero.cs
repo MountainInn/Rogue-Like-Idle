@@ -8,17 +8,17 @@ using Zenject;
 public class Hero : MonoBehaviour
 {
     [JsonPropertyAttribute] public Expiriense expiriense {get; private set;}
-    [JsonPropertyAttribute] public Unit unit {get; private set;}
     [JsonPropertyAttribute] public Level level {get; private set;}
+
+    [Inject]
+    [JsonPropertyAttribute] public Unit unit;
 
     public event Action<Hero> onHeroInitialized;
 
-    [Inject]
     private void Awake()
     {
         this.level = new Level(1);
         this.expiriense = new Expiriense(level, (level)=> level * 100);
-        this.unit = new Unit(10, 10, null);
         this.unit.level = level;
 
         onHeroInitialized?.Invoke(this);

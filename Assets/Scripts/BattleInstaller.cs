@@ -6,6 +6,11 @@ public class BattleInstaller : MonoInstaller
     public override void InstallBindings()
     {
         Container
+            .Bind<Unit>()
+            .FromMethod(CreateHeroUnit)
+            .WhenInjectedInto<Hero>()
+            .NonLazy();
+        Container
             .Bind<Hero>()
             .FromComponentInHierarchy()
             .AsSingle();
@@ -33,5 +38,10 @@ public class BattleInstaller : MonoInstaller
             .Bind<TalentView>()
             .FromResource("TalentView")
             .AsSingle();
+    }
+
+    private Unit CreateHeroUnit()
+    {
+        return new Unit(10,10,null);
     }
 }
