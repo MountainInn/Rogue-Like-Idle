@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using UnityEngine;
 
 public class Node<T> : IEnumerable
 {
@@ -7,11 +8,13 @@ public class Node<T> : IEnumerable
     public Node<T> parent;
     public List<Node<T>> children;
 
-    protected (int , int) coordinates;
+    protected (int, int) coordinates;
+    protected Vector2 position;
 
     public Node(T value)
     {
         Value = value;
+        children = new List<Node<T>>();
     }
 
     public void SetValue(T Value)
@@ -19,13 +22,14 @@ public class Node<T> : IEnumerable
         this.Value = Value;
     }
 
-    public void Add(Node<T> child)
-    {
-        children.Add(child);
-    }
     public void Add(T child)
     {
-        children.Add(new Node<T>(child));
+        Add(new Node<T>(child));
+    }
+    public void Add(Node<T> child)
+    {
+        child.parent = this;
+        children.Add(child);
     }
 
     public IEnumerator GetEnumerator()
@@ -35,7 +39,9 @@ public class Node<T> : IEnumerable
 
     public void ForEach(System.Action<Node<T>> action)
     {
-        foreach(var item in children)
+        action.Invoke(this);
+
+        foreach (var item in children)
         {
             action.Invoke(item.Value);
 
@@ -43,9 +49,16 @@ public class Node<T> : IEnumerable
         }
     }
 
-    public void ConstructTree()
+    public void ConstructTree(TalentView talentViewPrefab, Transform content, uint squareSize)
     {
         (int x, int y) = coordinates;
+        position = new Vector2(x, y) * squareSize;
+
+        int halfChildrenWidth = (parent is null) ? 0 : Mathf.CeilToInt(children.Count / 2f);
+
+        var view = GameObject.Instantiate(talentViewPrefab, content).GetComponent<RectTransform>();
+
+        view.anchoredPosition = position - new Vector2(halfChildrenWidth, 0);
 
         y++;
 
@@ -53,15 +66,10 @@ public class Node<T> : IEnumerable
         {
             item.coordinates = (x, y);
 
-            item.ConstructTree();
+            item.ConstructTree(talentViewPrefab, content, squareSize);
 
             x++;
         }
-    }
-
-    public void SetViewPosition(Transform view, uint squareSize)
-    {
-        view.localPosition = new Vector3(coordinates.Item1, coordinates.Item2, 0) * squareSize;
     }
 
     static public implicit operator Node<T>(T Value) => new Node<T>(Value);
