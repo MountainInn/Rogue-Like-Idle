@@ -22,6 +22,7 @@ public partial class Unit
             hero.onHeroInitialized += (hero)=> this.owner = hero;
         }
 
+        protected Talent() { }
         protected Talent(uint gateLevel)
         {
             this.gateLevel = gateLevel;
