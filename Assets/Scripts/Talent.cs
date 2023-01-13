@@ -67,7 +67,7 @@ public partial class Unit
         }
     }
 
-    public class TalentMultiplier
+    public class TalentMultiplier : IInitializable
     {
         public Unit owner {get; protected set;}
 
@@ -80,14 +80,17 @@ public partial class Unit
             this.owner = owner;
             this.stat = stat;
             this.multFunc = multFunc;
-
-            if (!stat.Contains(mult))
-                stat.Mult(mult);
         }
 
         public void UpdateMultiplier(int level)
         {
             mult = multFunc.Invoke(level);
+        }
+
+        public void Initialize()
+        {
+            if (!stat.Contains(mult))
+                stat.Mult(mult);
         }
     }
 
