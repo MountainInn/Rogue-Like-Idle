@@ -151,14 +151,23 @@ public partial class Unit
         }
     }
 
-    public class ChallengeTalent_Weakness : Unit.Talent
+    public class ChallengeTalent_Weakness : Unit.Talent, IInitializable
     {
         TalentMultiplier attackMult, defenseMult;
 
-        public ChallengeTalent_Weakness(uint gateLevel) : base("Challenge: Weakness", gateLevel)
+        public ChallengeTalent_Weakness() : base() { }
+        public ChallengeTalent_Weakness(uint gateLevel) : base("Challenge: Weakness", gateLevel) { }
+
+        public void Initialize()
         {
-            attackMult = new TalentMultiplier(owner, owner.attack, (level) => level * 0.1);
-            defenseMult = new TalentMultiplier(owner, owner.defense, (level) => level * 0.1);
+            attackMult = new TalentMultiplier(
+                owner.attack,
+                (level) => level * 0.1
+            );
+            defenseMult = new TalentMultiplier(
+                owner.defense,
+                (level) => level * 0.1
+            );
         }
 
         protected override void ConcreteLevelUp()
