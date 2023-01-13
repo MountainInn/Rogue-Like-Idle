@@ -113,21 +113,25 @@ public partial class Unit
         }
     }
 
-    public class ImprovedSimpleStrikeTalent : Unit.Talent
+    public class ImprovedSimpleStrikeTalent : Unit.Talent, IInitializable
     {
-        Ref<double> mult;
+        Unit.SimpleStrike simpleStrike;
+        TalentMultiplier multiplier;
 
-        public ImprovedSimpleStrikeTalent(uint gateLevel) : base("Improved Simple Strike", gateLevel)
+        public ImprovedSimpleStrikeTalent(uint gateLevel) : base("Improved Simple Strike", gateLevel) {}
+
+        public void Initialize()
         {
-            Unit.SimpleStrike simpleStrike = (Unit.SimpleStrike) owner.activeSkills.Find(skill => skill is SimpleStrike);
+            simpleStrike = owner.activeSkills.Find(skill => skill is SimpleStrike) as SimpleStrike;
 
-            mult = 1;
-            simpleStrike.skillPower.Mult(mult);
+            multiplier = new TalentMultiplier(
+                simpleStrike.skillPower,
+                (level) => 1 + level * .35);
         }
 
         protected override void ConcreteLevelUp()
         {
-            mult = 1 + level * 0.35f;
+            multiplier.UpdateMultiplier(level);
         }
     }
 
