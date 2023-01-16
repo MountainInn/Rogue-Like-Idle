@@ -12,6 +12,7 @@ public class DungeonFloor
 
 
     public event Action<uint> onFloorNumberUp;
+    public event Action<uint> onFloorNumberDown;
 
     [Inject]
     public DungeonFloor(DungeonFloorView view, Battle battle)
@@ -28,4 +29,10 @@ public class DungeonFloor
         onFloorNumberUp?.Invoke(floorNumber);
     }
 
+    public void DownFloorNumber()
+    {
+        floorNumber--;
+
+        onFloorNumberDown?.Invoke(floorNumber);
+    }
 }
