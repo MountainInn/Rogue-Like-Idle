@@ -41,6 +41,23 @@ public class Node<T> : IEnumerable
         return children.GetEnumerator();
     }
 
+    public void ForEach_BreadthFirst(System.Action<Node<T>> action)
+    {
+        Queue<Node<T>> childQueue = new Queue<Node<T>>();
+        childQueue.Enqueue(this);
+
+        while (childQueue.Peek() is not null)
+        {
+            var item = childQueue.Dequeue();
+
+            action.Invoke(item);
+
+            foreach (var child in item.children)
+            {
+                childQueue.Enqueue(child);
+            }
+        }
+    }
     public void ForEach(System.Action<Node<T>> action)
     {
         action.Invoke(this);
