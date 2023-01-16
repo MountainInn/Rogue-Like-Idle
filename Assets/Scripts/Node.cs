@@ -8,12 +8,13 @@ public class Node<T> : IEnumerable
     public Node<T> parent;
     public List<Node<T>> children;
 
-    protected (int, int) coordinates;
+    public (int, int) coordinates {get; protected set;}
     protected Vector2 position;
 
     public Node(T value)
     {
         Value = value;
+        coordinates = (0,0);
         children = new List<Node<T>>();
     }
 
@@ -29,6 +30,9 @@ public class Node<T> : IEnumerable
     public void Add(Node<T> child)
     {
         child.parent = this;
+
+        child.coordinates = (this.children.Count, this.coordinates.Item2 + 1);
+
         children.Add(child);
     }
 
