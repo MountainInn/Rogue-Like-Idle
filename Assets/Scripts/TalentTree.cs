@@ -73,18 +73,21 @@ public class TalentTree : MonoBehaviour
                               : new Vector2(x - halfChildrenCount, y));
 
 
-            var talent = node.Value;
+            var parentTalent = node.Value;
             foreach (var item in node.children)
             {
                 var childTalent = item.Value;
 
                 GateLineRenderer gateLineRenderer = GameObject.Instantiate(gateLinePrefab, content);
 
-                // gateLineRenderer.SetLine()
+                gateLineRenderer.SetLinePoints(parentTalent);
 
-                talent.level.onLevelUp += (level) =>
+                parentTalent.level.onLevelUp += (parentLevel) =>
                 {
-                    float fill = level / childTalent.gateLevel;
+                    if (parentLevel > childTalent.gateLevel)
+                        return;
+
+                    float fill = parentLevel / childTalent.gateLevel;
                     gateLineRenderer.SetFillValue(fill);
                 };
             }
