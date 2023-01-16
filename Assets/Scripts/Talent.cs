@@ -26,10 +26,6 @@ public partial class Unit
         }
 
         protected Talent() { }
-        protected Talent(uint gateLevel)
-        {
-            this.gateLevel = gateLevel;
-        }
         protected Talent(string name, uint gateLevel)
         {
             this.name = name;
