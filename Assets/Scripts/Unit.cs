@@ -44,6 +44,7 @@ public partial class Unit
         this.activeSkills = activeSkills ?? new List<Skill>();
         this.defense = new Stat(baseDefense);
         this.attack = new Stat(baseAttack);
+        InitializePower();
     }
     public Unit(string name, double baseAttack, double baseDefense, List<Skill> activeSkills = null) : this(baseDefense, baseAttack, activeSkills)
     {
@@ -74,7 +75,7 @@ public partial class Unit
         activeSkills.ForEach(skill => skill.Tick(delta));
     }
 
-    public void PrepareToFight()
+    public void InitializePower()
     {
         power = defense + attack;
     }

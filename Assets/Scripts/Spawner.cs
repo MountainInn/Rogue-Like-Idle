@@ -39,6 +39,8 @@ public class Spawner
 
         AddFloorPowerMult(mob, floorNumber);
 
+        mob.InitializePower();
+
         onOneNewMobSpawned?.Invoke(mob);
 
         return mob;
