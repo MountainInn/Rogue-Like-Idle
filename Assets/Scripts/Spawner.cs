@@ -60,7 +60,7 @@ public class Spawner
 
         float powerTens = MathF.Pow(tens, 2);
 
-        float power = powerTens + floorNumber;
+        float power = powerTens + floorNumber / 3;
 
         return power;
     }
