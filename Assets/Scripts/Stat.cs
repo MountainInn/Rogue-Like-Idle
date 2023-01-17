@@ -25,6 +25,7 @@ public partial class Unit
             mults = new List<Ref<double>>();
             superMults = new List<Ref<double>>();
             tempMults = new List<Ref<double>>();
+            tempAdditions = new Ref<double>(0);
         }
 
         public void Mult(double mult)
