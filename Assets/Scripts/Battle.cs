@@ -62,15 +62,14 @@ public class Battle : MonoBehaviour
         UpdateBattleProgress();
     }
 
-    private void PrepareBothTeamsForBattle()
-    {
-        playerTeam.PrepareForBattle(mobTeam);
-        mobTeam.PrepareForBattle(playerTeam);
-    }
-
     private void StartBattle()
     {
         isBattleOngoing = true;
+    }
+
+    private void StopBattle()
+    {
+        isBattleOngoing = false;
     }
 
 
@@ -91,10 +90,5 @@ public class Battle : MonoBehaviour
             StopBattle();
             onPlayerLost?.Invoke();
         }
-    }
-
-    private void StopBattle()
-    {
-        isBattleOngoing = false;
     }
 }
