@@ -56,7 +56,7 @@ public class Battle : MonoBehaviour
 
         float delta = Time.deltaTime;
 
-        playerTeam.SimulateUnits(delta);
+        heroTeam.SimulateUnits(delta);
         mobTeam.SimulateUnits(delta);
 
         UpdateBattleProgress();
@@ -76,8 +76,8 @@ public class Battle : MonoBehaviour
 
     private void UpdateBattleProgress()
     {
-        totalPower = playerTeam.totalPower + mobTeam.totalPower;
-        progress = (float)(playerTeam.totalPower / totalPower);
+        totalPower = heroTeam.totalPower + mobTeam.totalPower;
+        progress = (float)(heroTeam.totalPower / totalPower);
 
         onBattleProgressUpdated?.Invoke(progress);
 
