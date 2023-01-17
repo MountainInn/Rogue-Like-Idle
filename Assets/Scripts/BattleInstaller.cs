@@ -15,6 +15,10 @@ public class BattleInstaller : MonoInstaller
             .FromComponentInHierarchy()
             .AsSingle();
         Container
+            .Bind<TeamCreator>()
+            .FromComponentInHierarchy()
+            .AsSingle();
+        Container
             .Bind<Battle>()
             .FromComponentInHierarchy()
             .AsSingle();
