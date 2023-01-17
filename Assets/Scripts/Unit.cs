@@ -13,12 +13,18 @@ public partial class Unit
         get => _power;
         set
         {
-            _power = value;
+            _power = Math.Max(0, value);
+
             onPowerChanged?.Invoke(_power);
+
+            if (_power == 0)
+            {
+                onUnitDied?.Invoke(this);
+            }
         }
     }
 
-    public bool isAlive {get; private set;}
+    public bool isAlive => power > 0;
     private double _power;
     [JsonPropertyAttribute] public Stat defense, attack;
 
@@ -32,14 +38,12 @@ public partial class Unit
     public Unit()
     {
         activeSkills = new List<Skill>();
-        this.isAlive = true;
     }
     public Unit(double baseAttack,double baseDefense,  List<Skill> activeSkills = null)
     {
         this.activeSkills = activeSkills ?? new List<Skill>();
         this.defense = new Stat(baseDefense);
         this.attack = new Stat(baseAttack);
-        this.isAlive = true;
     }
     public Unit(string name, double baseAttack, double baseDefense, List<Skill> activeSkills = null) : this(baseDefense, baseAttack, activeSkills)
     {
@@ -70,15 +74,5 @@ public partial class Unit
             target = enemyTeam.units[0];
         else
             target = null;
-    }
-
-    public void CheckYourCondition()
-    {
-        if (power <= 0)
-        {
-            power = 0;
-            isAlive = false;
-            onUnitDied?.Invoke(this);
-        }
     }
 }
