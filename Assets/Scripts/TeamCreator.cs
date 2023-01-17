@@ -1,8 +1,9 @@
 using System;
 using Newtonsoft.Json;
+using UnityEngine;
 using Zenject;
 
-public class TeamCreator
+public class TeamCreator : MonoBehaviour
 {
     [JsonPropertyAttribute] private Team heroTeam, mobTeam;
     public event Action<Team> onMobTeamCreated;
