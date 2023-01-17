@@ -1,32 +1,42 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using UnityEngine;
 
 using Newtonsoft.Json;
+using System;
 
 [JsonObjectAttribute]
-public class Team : IEnumerable<Unit>
+public class Team
 {
     [JsonPropertyAttribute]
     public List<Unit> units {get; private set;}
 
     public double totalPower => units.Sum(unit => unit.power);
 
-    public Team(List<Unit> units)
+    public event Action<double> onPowerChanged;
+
+    public Team(){}
+
+    public void SetUnits(params Unit[] units)
     {
-        this.units = new List<Unit>();
-        foreach (var item in units)
-        {
-            Add(item);
-        }
+        SetUnits(units.ToList());
     }
-    public Team(params Unit[] units)
+    public void SetUnits(List<Unit> units)
     {
-        this.units = new List<Unit>();
-        foreach (var item in units)
+        this.units = units;
+
+        units.ForEach((u) =>
         {
-            Add(item);
-        }
+            u.onUnitDied += RemoveUnit;
+        });
+    }
+
+    private void RemoveUnit(Unit unit)
+    {
+        units.Remove(unit);
+
+        unit = null;
     }
 
     public void PrepareForBattle(Team enemyTeam)
@@ -35,46 +45,14 @@ public class Team : IEnumerable<Unit>
         {
             unit.enemyTeam = enemyTeam;
 
-            unit.SelectTarget();
-            unit.PrepareToFight();
+            unit.InitializePower();
         }
     }
 
     public void SimulateUnits(float delta)
     {
-        foreach (var unit in units)
-        {
-            if (!unit.isAlive) continue;
+        units.ForEach((u) => u.Fight(delta));
 
-            unit.Attack(delta);
-            unit.Defend(delta);
-            unit.UseSkills(delta);
-            unit.CheckYourCondition();
-        };
-    }
-
-    public void Set(List<Unit> units)
-    {
-        this.units = new List<Unit>();
-        foreach (var item in units)
-        {
-            Add(item);
-        }
-    }
-
-    public void Add(Unit unit)
-    {
-        units.Add(unit);
-    }
-
-    public IEnumerator<Unit> GetEnumerator()
-    {
-        return ((IEnumerable<Unit>)units).GetEnumerator();
-    }
-
-    IEnumerator IEnumerable.GetEnumerator()
-    {
-        return ((IEnumerable)units).GetEnumerator();
+        onPowerChanged?.Invoke(totalPower);
     }
 }
-
