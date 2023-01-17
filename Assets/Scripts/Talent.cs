@@ -11,37 +11,47 @@ public partial class Unit
         protected Unit owner;
         public Level level {get; protected set;}
         public uint gateLevel;
+        public double price;
 
-        private TalentPoints talentPoints;
+        public event Action<double> onPriceUpdated;
+
+        private Valueable talentPoints;
 
         [Inject]
-        public void Construct(// TalentPoints talentPoints,
-            Hero hero)
+        public void Construct(Vault vault, Hero hero)
         {
-            // this.talentPoints = talentPoints;
             hero.onHeroInitialized += (hero)=> this.owner = hero;
+
+            this.talentPoints = vault.talentPoints;
         }
 
         protected Talent() { }
-        protected Talent(uint gateLevel)
-        {
-            this.gateLevel = gateLevel;
-        }
         protected Talent(string name, uint gateLevel)
         {
             this.name = name;
             this.level = new Level(0);
             this.gateLevel = gateLevel;
+            UpdatePrice();
         }
 
         public void LevelUp()
         {
-            if (talentPoints <= 0)
+            if (!talentPoints.IsEnough(price))
                 return;
 
+            talentPoints -= price;
+           
             level.Up();
 
             ConcreteLevelUp();
+
+            UpdatePrice();
+        }
+
+        protected void UpdatePrice()
+        {
+            price = (level + 1);
+            onPriceUpdated?.Invoke(price);
         }
 
         abstract protected void ConcreteLevelUp();

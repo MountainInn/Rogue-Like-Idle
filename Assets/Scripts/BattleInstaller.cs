@@ -47,6 +47,11 @@ public class BattleInstaller : MonoInstaller
             .BindInterfacesAndSelfTo<Unit.ChallengeTalent_Weakness>()
             .AsSingle()
             .Lazy();
+
+        Container
+            .Bind<Vault>()
+            .FromComponentInHierarchy()
+            .AsSingle();
     }
 
     private Unit CreateHeroUnit()

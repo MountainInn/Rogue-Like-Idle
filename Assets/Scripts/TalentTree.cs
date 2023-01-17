@@ -54,7 +54,43 @@ public class TalentTree : MonoBehaviour
 
     private void Start()
     {
-        DisplayTree();
+        ConstructTree(150);
     }
 
+
+    private void ConstructTree(int squareSize)
+    {
+        branches[0].ForEach_BreadthFirst((node) =>
+        {
+
+            (int x, int y) = node.coordinates;
+
+            int halfChildrenCount = Mathf.CeilToInt(node.parent.children.Count / 2f);
+
+            view.anchoredPosition =
+                squareSize * ((node.parent is null)
+                              ? new Vector2(x, y)
+                              : new Vector2(x - halfChildrenCount, y));
+
+
+            var parentTalent = node.Value;
+            foreach (var item in node.children)
+            {
+                var childTalent = item.Value;
+
+                GateLineRenderer gateLineRenderer = GameObject.Instantiate(gateLinePrefab, content);
+
+                gateLineRenderer.SetLinePoints(parentTalent);
+
+                parentTalent.level.onLevelUp += (parentLevel) =>
+                {
+                    if (parentLevel > childTalent.gateLevel)
+                        return;
+
+                    float fill = parentLevel / childTalent.gateLevel;
+                    gateLineRenderer.SetFillValue(fill);
+                };
+            }
+        });
+    }
 }
