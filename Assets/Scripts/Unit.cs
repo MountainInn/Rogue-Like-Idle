@@ -77,7 +77,7 @@ public partial class Unit
 
     public void InitializePower()
     {
-        power = defense + attack;
+        _power = defense + attack;
     }
 
     public void SelectTarget()
