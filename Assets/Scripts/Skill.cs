@@ -56,6 +56,7 @@ public partial class Unit
 
         public SimpleStrike()
         {
+            levelMult = new Ref<int>(0);
             skillPower = new Stat(.2);
             skillPower.Mult(levelMult);
         }
