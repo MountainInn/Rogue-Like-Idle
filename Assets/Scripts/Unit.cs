@@ -50,15 +50,26 @@ public partial class Unit
         this.name = name;
     }
 
-    public void Attack(float delta)
+    public void Fight(float delta)
+    {
+        SelectTarget();
+
+        if (target is null)
+            return;
+
+        Attack(delta);
+        Defend(delta);
+        UseSkills(delta);
+    }
+    private void Attack(float delta)
     {
         target.power -= attack * delta;
     }
-    public void Defend(float delta)
+    private void Defend(float delta)
     {
         power += defense * delta;
     }
-    public void UseSkills(float delta)
+    private void UseSkills(float delta)
     {
         activeSkills.ForEach(skill => skill.Tick(delta));
     }
