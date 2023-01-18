@@ -16,42 +16,40 @@ public class MobPanel : MonoBehaviour
     private List<MobView> mobViews;
 
     private Spawner spawner;
-
+    private Team mobTeam;
 
     [Inject]
-    public void Construct(MobView mobViewPrefab, Spawner spawner, Battle battle)
+    public void Construct(MobView mobViewPrefab, Spawner spawner, TeamCreator teamCreator)
     {
         this.mobViewPrefab = mobViewPrefab;
 
-        this.spawner = spawner;
-        spawner.onOneNewMobSpawned += AddMob;
-        spawner.onOneNewMobSpawned += SubscribeOnRemove;
-
-        battle.onMobTeamInitialized += SubscribeToUpdateTotalPowerText;
-    }
-
-    private void SubscribeToUpdateTotalPowerText(Team team)
-    {
-        team.units.ForEach((unit) => unit.onPowerChanged += Upd);
-
-        void Upd(double _)
+        spawner.onOneNewMobSpawned += (mob)=>
         {
-            UpdateTotalPowerText(team);
-        }
+            AddMobView(mob);
+            mob.onUnitDied += RemoveMobView;
+        };
+
+        teamCreator.onMobTeamCreated += (mobTeam) =>
+        {
+            this.mobTeam = mobTeam;
+
+            mobTeam.onPowerChanged += UpdateTotalPowerText;
+        };
     }
 
-    private void UpdateTotalPowerText(Team team)
-    {
-        totalPowerText.text = $"Total\nPower\n{team.totalPower.BeautifulFormat()}";
-    }
-
-    public void Awake()
+    private void Awake()
     {
         mobViews = new List<MobView>();
     }
 
-    public void AddMob(Unit mob)
+    private void UpdateTotalPowerText(double power)
     {
+        totalPowerText.text = $"Total\nPower\n{power.BeautifulFormat()}";
+    }
+
+    public void AddMobView(Unit mob)
+    {
+        Debug.Log("Added");
         MobView view = Instantiate(mobViewPrefab, mobVerticalGroup);
 
         view.SetMob(mob);
@@ -59,17 +57,11 @@ public class MobPanel : MonoBehaviour
         mobViews.Add(view);
     }
 
-    private void SubscribeOnRemove(Unit mob)
-    {
-        mob.onUnitDied += RemoveMobView;
-    }
-
     public void RemoveMobView(Unit mob)
     {
         MobView mobView = mobViews.First((view)=> view.mob == mob);
 
         mobViews.Remove(mobView);
-
         Destroy(mobView.gameObject);
     }
 
